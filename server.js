@@ -1,22 +1,21 @@
-const express = require("express");
-const path = require("path");
+import express, { json, urlencoded, static as expressStatic } from "express";
+
+import { htmlRouter, apiRouter } from "./routes/index.js";
 
 const PORT = 3001;
 
+// Create app
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+// Use middleware
+app.use(json());
+app.use(urlencoded({ extended: true }));
+app.use(expressStatic("public"));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+app.use("/", htmlRouter);
+app.use("/api", apiRouter);
 
-app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "/public/notes.html"));
-});
-
+// Listen for port
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT}`)
 );
