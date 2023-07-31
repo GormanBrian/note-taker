@@ -1,36 +1,28 @@
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import { __dirname, removeElementFromArray, read } from "../utils/index.js";
+import Note from "./Notes.js";
 
 /** Path of the database file */
 const dbPath = join(__dirname, "db/db.json");
 
 /**
- * @typedef {Object} item Database item
- * @property {string} title Title of the item
- * @property {string} text Text of the item
- * @property {string} id Unique identifier
- */
-
-/** @typedef {Array<item>} items Array of {@link item} objects */
-
-/**
  * Reads JSON from database file
- * @returns {Promise<items>} Handle result of {@link read}
+ * @returns {Promise<NotesNamespace.Notes>} Handle result of {@link read}
  */
 const readDatabase = async () => read(dbPath);
 
 /**
  * Writes data to the database file
- * @param {items} data Items array
+ * @param {NotesNamespace.Notes} data Items array
  * @returns {Promise<void>} Handle result of {@link writeFile}
  */
 const writeDatabase = async (data) => writeFile(dbPath, JSON.stringify(data));
 
 /**
  * @callback modify Modifies database array
- * @param {items} data Items array
- * @returns {items} Modified array
+ * @param {NotesNamespace.Notes} data Items array
+ * @returns {NotesNamespace.Notes} Modified array
  */
 
 /**
@@ -42,26 +34,26 @@ const modifyDatabase = async (modify) =>
   readDatabase().then((data) => writeDatabase(modify(data)));
 
 /**
- * Adds an item to the database
- * @param {item} item Item to be added
+ * Adds a note to the database
+ * @param {NotesNamespace.NoteObject} note Note to be added
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
-const addItemToDatabase = async (item) =>
+const addNoteToDatabase = async (note) =>
   modifyDatabase((data) => {
-    let items = data;
-    data.push(item);
-    return items;
+    let notes = data;
+    data.push(note);
+    return notes;
   });
 
 /**
- * Removes an item from the database
- * @param {string} id Unique `id` of the item to be removed
+ * Removes a note from the database
+ * @param {string} id Unique `id` of the note to be removed
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
-const removeItemFromDatabase = async (id) =>
+const removeNoteFromDatabase = async (id) =>
   modifyDatabase((data) => {
-    const items = removeElementFromArray(data, "id", id);
-    return items;
+    const notes = removeElementFromArray(data, "id", id);
+    return notes;
   });
 
-export { readDatabase, addItemToDatabase, removeItemFromDatabase };
+export { readDatabase, addNoteToDatabase, removeNoteFromDatabase };
