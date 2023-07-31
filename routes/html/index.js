@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { join } from "path";
-import { __dirname } from "../../utils/files.js";
+import { __dirname } from "../../utils/index.js";
 
 const router = Router();
 
