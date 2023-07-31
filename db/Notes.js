@@ -4,11 +4,11 @@
  * @class Note class
  * @memberof NotesNamespace
  */
-export class Note {
+export default class Note {
   /**
    * @typedef {Object} NoteObject Serialized {@link Note} object
-   * @property {string} title Title of the {@link Note}
-   * @property {string} text Text of the {@link Note}
+   * @property {string} title Title of the `Note`
+   * @property {string} text Text of the `Note`
    * @property {string} id Unique identifier
    * @property {boolean} favorite Favorite status
    * @memberof NotesNamespace
@@ -45,7 +45,7 @@ export class Note {
 
   /**
    * Serializes {@link Note} instance
-   * @returns {NoteObject} Serialized {@link Note} object
+   * @returns {NoteObject} Serialized `Note` object
    */
   serialize() {
     return {
@@ -58,28 +58,28 @@ export class Note {
 
   /**
    * Serializes an array of {@link Note} instances
-   * @param {Notes} note Array of {@link Note} instances
-   * @returns {NoteObjects} Serialized {@link Note} objects
+   * @param {Notes} note Array of `Note` instances
+   * @returns {NoteObjects} Serialized `Note` objects
    */
   static serializeArray = (notes) => notes.map((n) => n.serialize());
 
   /**
    * Serializes and stringifies {@link Note} instance
-   * @returns {string} Stringified {@link Note}
+   * @returns {string} Stringified `Note`
    */
   stringify = () => JSON.stringify(this.serialize());
 
   /**
    * Serializes and stringifies an array of {@link Note} instances
-   * @param {Notes} notes Array of {@link Note} instances
-   * @returns {string} Stringified {@link Note} array
+   * @param {Notes} notes Array of `Note` instances
+   * @returns {string} Stringified `Note` array
    */
   static stringifyArray = (notes) => JSON.stringify(Note.serializeArray(notes));
 
   /**
    * Deserializes a {@link NoteObject} and creates a new instance of {@link Note}
    * @param {NoteObject} object JSON object to deserialize
-   * @returns {Note} {@link Note} instance
+   * @returns {Note} `Note` instance
    * @throws Will throw an error when `object` does not contain `title` or `text` properties
    */
   static deserialize = (object) => {
@@ -92,7 +92,7 @@ export class Note {
   /**
    * Deserializes a {@link NoteObjects} array and created an array of {@link Note} instances
    * @param {NoteObjects} objects JSON objects to deserialize
-   * @returns {Notes} Array of {@link Note} instances
+   * @returns {Notes} Array of `Note` instances
    * @throws Will throw an error when an object does not contain `title` or `text` properties
    */
   static deserializeArray = (objects) =>
@@ -101,7 +101,7 @@ export class Note {
   /**
    * Parses and deserializes a string into a new instance of {@link Note}
    * @param {string} string Stringified {@link NoteObject}
-   * @returns {Note} {@link Note} instance
+   * @returns {Note} `Note` instance
    * @throws Will throw an error when parsed `string` does not contain `title` or `text` properties
    */
   static parseToInstance = (string) => Item.deserialize(JSON.parse(string));
@@ -109,7 +109,7 @@ export class Note {
   /**
    * Parses and deserializes a string into a {@link Notes} array
    * @param {string} string Stringified {@link NoteObjects}
-   * @returns {Notes} Array of {@link Note} instances
+   * @returns {Notes} Array of `Note` instances
    */
   static parseToArray = (string) => Item.deserializeArray(JSON.parse(string));
 }

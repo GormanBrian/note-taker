@@ -13,7 +13,7 @@ const router = Router();
  *    responses:
  *
  */
-router.get("/notes", (req, res) => {
+router.get("/notes", (req, res) =>
   readDatabase()
     .then(async (db) => {
       console.info(`${req.method} request received`);
@@ -22,8 +22,8 @@ router.get("/notes", (req, res) => {
     .catch((err) => {
       console.error(err);
       res.status(400).json({ status: "failure", body: err });
-    });
-});
+    })
+);
 
 /**
  * /api/notes

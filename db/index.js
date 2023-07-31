@@ -10,7 +10,7 @@ const dbPath = join(__dirname, "db/db.json");
  * Reads JSON from database file
  * @returns {Promise<NotesNamespace.Notes>} Handle result of {@link read}
  */
-const readDatabase = async () => read(dbPath);
+export const readDatabase = async () => read(dbPath);
 
 /**
  * Writes data to the database file
@@ -21,7 +21,7 @@ const writeDatabase = async (data) => writeFile(dbPath, JSON.stringify(data));
 
 /**
  * @callback modify Modifies database array
- * @param {NotesNamespace.Notes} data Items array
+ * @param {NotesNamespace.Notes} notes Items array
  * @returns {NotesNamespace.Notes} Modified array
  */
 
@@ -38,7 +38,7 @@ const modifyDatabase = async (modify) =>
  * @param {NotesNamespace.NoteObject} note Note to be added
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
-const addNoteToDatabase = async (note) =>
+export const addNoteToDatabase = async (note) =>
   modifyDatabase((data) => {
     let notes = data;
     data.push(note);
@@ -50,10 +50,5 @@ const addNoteToDatabase = async (note) =>
  * @param {string} id Unique `id` of the note to be removed
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
-const removeNoteFromDatabase = async (id) =>
-  modifyDatabase((data) => {
-    const notes = removeElementFromArray(data, "id", id);
-    return notes;
-  });
-
-export { readDatabase, addNoteToDatabase, removeNoteFromDatabase };
+export const removeNoteFromDatabase = async (id) =>
+  modifyDatabase((notes) => removeElementFromArray(notes, "id", id));
