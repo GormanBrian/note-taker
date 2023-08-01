@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 /** @namespace NotesNamespace */
 
 /**
@@ -83,8 +85,7 @@ export default class Note {
    * @throws Will throw an error when `object` does not contain `title` or `text` properties
    */
   static deserialize = (object) => {
-    let properties = Object.getOwnPropertyNames(object);
-    if (!("title" in properties) || !("text" in properties))
+    if (!("title" in object && "text" in object))
       throw new Error("Object is missing necessary properties");
     return new Note(object.title, object.text, object.id, object.favorite);
   };

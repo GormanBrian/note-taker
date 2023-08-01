@@ -3,6 +3,8 @@ import { join } from "path";
 import { __dirname, removeElementFromArray, read } from "../utils/index.js";
 import Note from "./Notes.js";
 
+export { Note };
+
 /** Path of the database file */
 const dbPath = join(__dirname, "db/db.json");
 
@@ -23,6 +25,7 @@ const writeDatabase = async (data) => writeFile(dbPath, JSON.stringify(data));
  * @callback modify Modifies database array
  * @param {NotesNamespace.Notes} notes Items array
  * @returns {NotesNamespace.Notes} Modified array
+ * @throws Can throw an error
  */
 
 /**
@@ -31,24 +34,30 @@ const writeDatabase = async (data) => writeFile(dbPath, JSON.stringify(data));
  * @returns {Promise<void>} Handle result of {@link readFile} and {@link writeFile}
  */
 const modifyDatabase = async (modify) =>
-  readDatabase().then((data) => writeDatabase(modify(data)));
+  readDatabase().then((data) => {
+    let modifiedData = modify(data);
+    writeDatabase(modifiedData);
+  });
 
 /**
  * Adds a note to the database
  * @param {NotesNamespace.NoteObject} note Note to be added
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
-export const addNoteToDatabase = async (note) =>
-  modifyDatabase((data) => {
-    let notes = data;
-    data.push(note);
-    return notes;
+export const saveNoteToDatabase = async (note) => {
+  modifyDatabase((notes) => {
+    const newNotes = notes;
+    const index = newNotes.findIndex((n) => n.id === note.id);
+    if (index === -1) newNotes.push(note);
+    else newNotes[index] = note;
+    return newNotes;
   });
+};
 
 /**
  * Removes a note from the database
- * @param {string} id Unique `id` of the note to be removed
+ * @param {string} id Unique identifier of the note to be removed
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
-export const removeNoteFromDatabase = async (id) =>
-  modifyDatabase((notes) => removeElementFromArray(notes, "id", id));
+export const deleteNoteFromDatabase = async (key, value) =>
+  modifyDatabase((notes) => removeElementFromArray(notes, key, value));

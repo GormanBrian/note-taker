@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { v4 as uuidv4 } from "uuid";
 
-import { readDatabase, removeNoteFromDatabase } from "../../db/index.js";
+import {
+  Note,
+  readDatabase,
+  saveNoteToDatabase,
+  deleteNoteFromDatabase,
+} from "../../db/index.js";
 
+/**
+ *
+ */
 const router = Router();
 
 /**
@@ -27,22 +34,48 @@ router.get("/notes", (req, res) =>
 
 /**
  * /api/notes
- *  get:
+ *  post:
  *    summary:
  *    description:
  *    responses:
  *
  */
-router.post("/notes", (req, res) => {});
+router.post("/notes", (req, res) => {
+  console.info(`${req.method} request received`);
+  if (!req.body) return res.send(400).json("Body required");
+  try {
+    const note = Note.deserialize(req.body);
+    saveNoteToDatabase(note).then(() => {
+      console.info("Saved note to database");
+      return res.status(201).json(note.serialize());
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+});
 
 /**
  * /api/notes
- *  get:
+ *  delete:
  *    summary:
  *    description:
  *    responses:
  *
  */
-router.delete("/notes/:id", (req, res) => {});
+router.delete("/notes/:id", (req, res) => {
+  console.info(`${req.method} request received`);
+  const { id } = req.params;
+  if (!id) return res.status(400).json("ID required");
+  deleteNoteFromDatabase("id", id)
+    .then(() => {
+      console.info("Removed note from database");
+      return res.status(201).json("success");
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.status(500).json(err);
+    });
+});
 
 export default router;
