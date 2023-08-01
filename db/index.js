@@ -60,4 +60,6 @@ export const saveNoteToDatabase = async (note) => {
  * @returns {Promise<void>} Handle result of {@link modifyDatabase}
  */
 export const deleteNoteFromDatabase = async (key, value) =>
-  modifyDatabase((notes) => removeElementFromArray(notes, key, value));
+  modifyDatabase((notes) =>
+    notes.length === 1 ? [] : removeElementFromArray(notes, key, value)
+  );
