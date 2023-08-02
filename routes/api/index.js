@@ -8,7 +8,7 @@ import {
 } from "../../db/index.js";
 
 /**
- *
+ * API Router
  */
 const router = Router();
 
@@ -47,7 +47,7 @@ router.post("/notes", (req, res) => {
     const note = Note.deserialize(req.body);
     saveNoteToDatabase(note).then(() => {
       console.info("Saved note to database");
-      return res.status(201).json(note.serialize());
+      return res.status(201).json(note.serialize);
     });
   } catch (err) {
     console.error(err);

@@ -1,33 +1,40 @@
 import { v4 as uuidv4 } from "uuid";
 
-/** @namespace NotesNamespace */
+/**
+ * @overview Contains Note class definition
+ */
 
 /**
+ * @module Note
  * @class Note class
- * @memberof NotesNamespace
+ * @classdesc Represents a note object in the database
  */
 export default class Note {
+  /* ========================== TYPEDEF ========================== */
+
   /**
-   * @typedef {Object} NoteObject Serialized {@link Note} object
-   * @property {string} title Title of the `Note`
-   * @property {string} text Text of the `Note`
+   * @typedef {Object} NoteObject Serialized {@linkcode Note} object
+   * @property {string} title Title of the Note
+   * @property {string} text Text of the Note
    * @property {string} id Unique identifier
    * @property {boolean} favorite Favorite status
-   * @memberof NotesNamespace
+   * @memberof Note
    */
 
   /**
-   * @typedef {Array<Note>} Notes Array of {@link Note} instances
-   * @memberof NotesNamespace
+   * @typedef {Array<Note>} Notes Array of {@linkcode Note} instances
+   * @memberof Note
    */
 
   /**
-   * @typedef {Array<NoteObject>} NoteObjects Array of {@link NoteObject} objects
-   * @memberof NotesNamespace
+   * @typedef {Array<NoteObject>} NoteObjects Array of {@linkcode NoteObject} objects
+   * @memberof Note
    */
 
+  /* ====================== CLASS PROPERTIES ===================== */
+
   /**
-   * @constructor Constructor for {@link Note} class
+   * @constructor Constructor for {@linkcode Note} class
    * @param {string} title Title of the note
    * @param {string} text Text of the note
    * @param {string} [id=uuidv4()] Unique identifier
@@ -45,11 +52,14 @@ export default class Note {
     this.favorite = !this.favorite;
   }
 
+  /* ========================= SERIALIZE ========================= */
+
   /**
-   * Serializes {@link Note} instance
-   * @returns {NoteObject} Serialized `Note` object
+   * Serialized {@linkcode Note} instance
+   *
+   * @type {NoteObject}
    */
-  serialize() {
+  get serialize() {
     return {
       title: this.title,
       text: this.text,
@@ -59,30 +69,42 @@ export default class Note {
   }
 
   /**
-   * Serializes an array of {@link Note} instances
-   * @param {Notes} note Array of `Note` instances
-   * @returns {NoteObjects} Serialized `Note` objects
+   * Serializes an array of {@linkcode Note} instances
+   *
+   * @param {Notes} note Array of Note instances
+   * @returns {NoteObjects} Serialized Note objects
+   * @method serializeArray
    */
-  static serializeArray = (notes) => notes.map((n) => n.serialize());
+  static serializeArray = (notes) => notes.map((n) => n.serialize);
+
+  /* ========================= STRINGIFY ========================= */
 
   /**
-   * Serializes and stringifies {@link Note} instance
-   * @returns {string} Stringified `Note`
+   * Serializes and stringifies {@linkcode Note} instance
+   *
+   * @returns {string} Stringified Note
+   * @method stringify
    */
   stringify = () => JSON.stringify(this.serialize());
 
   /**
-   * Serializes and stringifies an array of {@link Note} instances
-   * @param {Notes} notes Array of `Note` instances
-   * @returns {string} Stringified `Note` array
+   * Serializes and stringifies an array of {@linkcode Note} instances
+   *
+   * @method stringifyArray
+   * @param {Notes} notes Array of Note instances
+   * @returns {string} Stringified Note array
    */
   static stringifyArray = (notes) => JSON.stringify(Note.serializeArray(notes));
 
+  /* ======================== DESERIALIZE ======================== */
+
   /**
-   * Deserializes a {@link NoteObject} and creates a new instance of {@link Note}
+   * Deserializes a {@linkcode NoteObject} and creates a new instance of {@linkcode Note}
+   *
    * @param {NoteObject} object JSON object to deserialize
-   * @returns {Note} `Note` instance
+   * @returns {Note} Note instance
    * @throws Will throw an error when `object` does not contain `title` or `text` properties
+   * @method deserialize
    */
   static deserialize = (object) => {
     if (!("title" in object && "text" in object))
@@ -91,26 +113,33 @@ export default class Note {
   };
 
   /**
-   * Deserializes a {@link NoteObjects} array and created an array of {@link Note} instances
+   * Deserializes a {@linkcode NoteObjects} array and created an array of {@linkcode Note} instances
+   *
    * @param {NoteObjects} objects JSON objects to deserialize
-   * @returns {Notes} Array of `Note` instances
+   * @returns {Notes} Array of Note instances
    * @throws Will throw an error when an object does not contain `title` or `text` properties
+   * @method deserializeArray
    */
-  static deserializeArray = (objects) =>
-    objects.map((o) => Note.deserialize(o));
+  static deserializeArray = (objects) => objects.map(Note.deserialize);
+
+  /* =========================== Parse =========================== */
 
   /**
-   * Parses and deserializes a string into a new instance of {@link Note}
-   * @param {string} string Stringified {@link NoteObject}
-   * @returns {Note} `Note` instance
+   * Parses and deserializes a string into a new instance of {@linkcode Note}
+   *
+   * @param {string} string Stringified {@linkcode NoteObject}
+   * @returns {Note} Note instance
    * @throws Will throw an error when parsed `string` does not contain `title` or `text` properties
+   * @method parseToInstance
    */
   static parseToInstance = (string) => Item.deserialize(JSON.parse(string));
 
   /**
-   * Parses and deserializes a string into a {@link Notes} array
-   * @param {string} string Stringified {@link NoteObjects}
-   * @returns {Notes} Array of `Note` instances
+   * Parses and deserializes a string into a {@linkcode Notes} array
+   *
+   * @param {string} string Stringified {@linkcode NoteObjects}
+   * @returns {Notes} Array of {@linkcode Note} instances
+   * @method parseToArray
    */
   static parseToArray = (string) => Item.deserializeArray(JSON.parse(string));
 }

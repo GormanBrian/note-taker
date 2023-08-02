@@ -5,44 +5,62 @@ import Note from "./Notes.js";
 
 export { Note };
 
-/** Path of the database file */
+/**
+ * Path of the database file
+ *
+ * @readonly
+ * @constant dbPath
+ */
 const dbPath = join(__dirname, "db/db.json");
 
 /**
- * Reads JSON from database file
- * @returns {Promise<NotesNamespace.Notes>} Handle result of {@link read}
+ * Reads JSON array from database file
+ *
+ * @async
+ * @method readDatabase
+ * @returns {Promise<Note.Notes>} Handle result of {@linkcode read}
+ * @throws Will throw an error when database is invalid or data can not be parsed
  */
-export const readDatabase = async () => read(dbPath);
+export const readDatabase = async () => read(dbPath, []);
 
 /**
  * Writes data to the database file
- * @param {NotesNamespace.Notes} data Items array
- * @returns {Promise<void>} Handle result of {@link writeFile}
+ *
+ * @async
+ * @method writeDatabase
+ * @param {Note.Notes} data Notes array
+ * @returns {Promise<void>} Handle result of {@linkcode writeFile}
  */
 const writeDatabase = async (data) => writeFile(dbPath, JSON.stringify(data));
 
 /**
- * @callback modify Modifies database array
- * @param {NotesNamespace.Notes} notes Items array
- * @returns {NotesNamespace.Notes} Modified array
+ * @callback modifyCallback Modifies database array
+ * @param {Note.Notes} notes Notes array
+ * @returns {Note.Notes} Modified array
  * @throws Can throw an error
  */
 
 /**
  * Reads the database file, modifies the array, then writes the modified array to the file.
- * @param {modify} modify Callback that returns the modified database array
- * @returns {Promise<void>} Handle result of {@link readFile} and {@link writeFile}
+ *
+ * @async
+ * @method modifyDatabase
+ * @param {modifyCallback} modifyCallback Callback that modifies the database array
+ * @returns {Promise<void>} Handle result of {@linkcode readFile} and {@linkcode writeFile}
  */
-const modifyDatabase = async (modify) =>
+const modifyDatabase = async (modifyCallback) =>
   readDatabase().then((data) => {
-    let modifiedData = modify(data);
+    let modifiedData = modifyCallback(data);
     writeDatabase(modifiedData);
   });
 
 /**
- * Adds a note to the database
- * @param {NotesNamespace.NoteObject} note Note to be added
- * @returns {Promise<void>} Handle result of {@link modifyDatabase}
+ * Adds a {@linkcode Note} to the database
+ *
+ * @async
+ * @method saveNoteToDatabase
+ * @param {Note.NoteObject} note Note to be added
+ * @returns {Promise<void>} Handle result of {@linkcode modifyDatabase}
  */
 export const saveNoteToDatabase = async (note) => {
   modifyDatabase((notes) => {
@@ -55,9 +73,12 @@ export const saveNoteToDatabase = async (note) => {
 };
 
 /**
- * Removes a note from the database
+ * Removes a {@linkcode Note} from the database
+ *
+ * @async
+ * @method deleteNoteFromDatabase
  * @param {string} id Unique identifier of the note to be removed
- * @returns {Promise<void>} Handle result of {@link modifyDatabase}
+ * @returns {Promise<void>} Handle result of {@linkcode modifyDatabase}
  */
 export const deleteNoteFromDatabase = async (key, value) =>
   modifyDatabase((notes) =>

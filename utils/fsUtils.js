@@ -2,7 +2,14 @@ import { fileURLToPath } from "url";
 import { dirname, join, extname } from "path";
 import { readFile } from "fs/promises";
 
-/** Root directory of the project */
+/**
+ * @overview Provides utility functions for {@linkcode module:fs/promises file system}
+ */
+
+/**
+ * Root directory of the project
+ * @constant __dirname
+ */
 export const __dirname = join(dirname(fileURLToPath(import.meta.url)), "../");
 
 /**
@@ -10,17 +17,24 @@ export const __dirname = join(dirname(fileURLToPath(import.meta.url)), "../");
  *  resolves with data or rejects with an error.
  *
  * Error conditions:
- * - File is empty
- * - Filed extension is not valid
- * - Data could not be parsed
+ * - {@linkcode Error} - File is empty and `initialValue` not provided
+ * - {@linkcode TypeError} - Filed extension is not valid
+ * - {@linkcode SyntaxError} - Data could not be parsed
  *
+ * @method read
  * @param path Path of the file
+ * @param {any} [initialValue] Value to return if the file is empty
  * @returns {Promise} Handle result of {@link readFile}
  * @throws Will throw an error when file is invalid, empty, or data can not be parsed
  */
-export const read = async (path) =>
+export const read = async (path, initialValue) =>
   readFile(path).then((data) => {
-    if (data.length <= 0) throw new Error("File is empty");
+    // Handle empty file
+    if (data.length <= 0) {
+      if (initialValue) return initialValue;
+      throw new Error("File is empty");
+    }
+    // Get file extension (e.g., `.js`, `.md`, `.json`)
     const ext = extname(path);
     if (ext === "") throw new TypeError("File extension not found");
     switch (ext) {
