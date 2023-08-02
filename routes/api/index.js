@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, json, urlencoded } from "express";
 
 import {
   Note,
@@ -11,6 +11,10 @@ import {
  * API Router
  */
 const router = Router();
+
+/* Use middleware */
+router.use(json());
+router.use(urlencoded({ extended: true }));
 
 /**
  * /api/notes
@@ -56,7 +60,7 @@ router.post("/notes", (req, res) => {
 });
 
 /**
- * /api/notes
+ * /api/notes/:id
  *  delete:
  *    summary:
  *    description:

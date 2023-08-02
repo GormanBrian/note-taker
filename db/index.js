@@ -19,7 +19,7 @@ const dbPath = join(__dirname, "db/db.json");
  * @async
  * @method readDatabase
  * @returns {Promise<Note.Notes>} Handle result of {@linkcode read}
- * @throws Will throw an error when database is invalid or data can not be parsed
+ * @throws Will throw an error when database path is invalid or data can not be parsed
  */
 export const readDatabase = async () => read(dbPath, []);
 

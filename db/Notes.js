@@ -57,6 +57,7 @@ export default class Note {
   /**
    * Serialized {@linkcode Note} instance
    *
+   * @readonly
    * @type {NoteObject}
    */
   get serialize() {
