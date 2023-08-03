@@ -18,17 +18,7 @@ npm i
 
 ## Usage
 
-Visit the deployed application [here]()
-
-## Contributions
-
-N/A
-
-## Testing
-
-```console
-npm test
-```
+Visit the deployed application [here](https://fathomless-fortress-32530-2e018f53104e.herokuapp.com/)
 
 ## Questions
 
