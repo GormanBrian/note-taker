@@ -12,7 +12,7 @@ import { htmlRouter, apiRouter } from "./routes/index.js";
  * @constant {number} PORT
  * @default 3001
  */
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 /**
  * Express App
